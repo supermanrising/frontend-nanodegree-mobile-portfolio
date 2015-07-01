@@ -54,15 +54,9 @@
         border-top: 1px solid #ccc;
       }
       footer span { float: right; font-style: italic; }
-
-      /* Smartphones (portrait) */
-      /* Move this into a seperate file and use media query in html */
-      @media only screen and (max-width: 480px) {
-        body { font-size: 12px;}
-        header p { padding-left: 4.5em;}
-      }
     </style>
     <link href="css/print.css" rel="stylesheet" media="print">
+    <link href="css/portrait.css" rel="stylesheet" media="orientation:portrait">
 
 <!-- Use async, it's google analytics so we don't need to use blocking -->
 <!-- possibly use window.onload for the inline google analytics script if you can't move it to a seperate file -->
@@ -84,7 +78,7 @@
 
   <body>
     <header>
-      <a href="/"><img src="img/profilepic.jpg"></a>
+      <a href="/"><img src="img/profilepic-compressed.jpg"></a>
       <p>Cameron Pittman<br><span>Course Developer</span></p>
     </header>
 
@@ -114,7 +108,7 @@
           </li>
 
           <li>
-            <img style="width: 100px;" src="views/images/pizzeria-sm.jpg">
+            <img src="views/images/pizzeria-compressed.jpg">
             <a href="views/pizza.html">Cam's Pizzeria</a>
             <p>Who wants a performant pizza?</p>
           </li>
