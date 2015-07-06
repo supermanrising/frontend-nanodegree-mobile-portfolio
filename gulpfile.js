@@ -17,7 +17,7 @@ var imagemin = require('gulp-imagemin');
 // minify new images
 gulp.task('imagemin', function() {
   var imgSrc = './img/*',
-      imgDst = './img-minified';
+      imgDst = './minified/img';
  
   gulp.src(imgSrc)
     .pipe(changed(imgDst))
