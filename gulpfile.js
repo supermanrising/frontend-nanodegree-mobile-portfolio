@@ -7,6 +7,10 @@ var changed = require('gulp-changed');
 var imagemin = require('gulp-imagemin');
 var minifyHTML = require('gulp-minify-html');
 var minifyCSS = require('gulp-minify-css');
+var stripDebug = require('gulp-strip-debug');
+var uglify = require('gulp-uglify');
+var serve = require('gulp-serve');
+var browserSync = require('browser-sync');
  
 // JS hint task
 gulp.task('jshint', function() {
@@ -37,7 +41,7 @@ gulp.task('htmlpage', function() {
     .pipe(gulp.dest(htmlDst));
 });
 
-// minify new or changed HTML pages
+// minify new or changed CSS pages
 gulp.task('cssmin', function() {
   var cssSrc = './css/*.css',
       cssDst = './minified/css';
@@ -46,4 +50,27 @@ gulp.task('cssmin', function() {
     .pipe(changed(cssDst))
     .pipe(minifyCSS())
     .pipe(gulp.dest(cssDst));
+});
+
+// JS strip debugging and minify
+gulp.task('scripts', function() {
+  var jsSrc = './js/*.js',
+      jsDst = './minified/js';
+
+  gulp.src(jsSrc)
+    .pipe(changed(jsDst))
+    .pipe(stripDebug())
+    .pipe(uglify())
+    .pipe(gulp.dest(jsDst));
+});
+
+// Static server
+gulp.task('browser-sync', function() {
+    browserSync.init({
+      server: {
+        baseDir: "minified",
+        index: "index.html"
+      },
+      port: 8080
+    });
 });
