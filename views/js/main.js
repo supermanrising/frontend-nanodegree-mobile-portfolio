@@ -405,6 +405,7 @@ var resizePizzas = function(size) {
   // Changes the value for the size of the pizza above the slider
   function changeSliderLabel(size) {
     switch(size) {
+      // TODO: Check the scope of what this effects.  Is there a better way to do this that won't involve as much work?  Can we affect less of the DOM?
       case "1":
         document.querySelector("#pizzaSize").innerHTML = "Small";
         return;
