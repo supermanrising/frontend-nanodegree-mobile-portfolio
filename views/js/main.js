@@ -437,8 +437,10 @@ var resizePizzas = function(size) {
         console.log("bug in sizeSwitcher");
     }
 
+    // select all pizza containers outside of the loop
     var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
     
+    // change size of all pizza containers according to newwidth variable
     for (var i = 0; i < randomPizzas.length; i++) {
       randomPizzas[i].style.width = newwidth + "%";
     }
@@ -489,22 +491,29 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
+  // moved the layout calculation out of the for loop
   var scroll = document.body.scrollTop;
-// moved the layout calculation out of the for loop
   var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((scroll / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+
+  // Create a function for moving the pizzas so it can be called by requestAnimationFrame
+  function moveThePizzas() {
+    for (var i = 0; i < items.length; i++) {
+      var phase = Math.sin((scroll / 1250) + (i % 5));
+      items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    }
+
+    // User Timing API to the rescue again. Seriously, it's worth learning.
+    // Super easy to create custom metrics.
+    window.performance.mark("mark_end_frame");
+    window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+    if (frame % 10 === 0) {
+      var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+      logAverageFrame(timesToUpdatePosition);
+    }
   }
 
-  // User Timing API to the rescue again. Seriously, it's worth learning.
-  // Super easy to create custom metrics.
-  window.performance.mark("mark_end_frame");
-  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
-  if (frame % 10 === 0) {
-    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
-    logAverageFrame(timesToUpdatePosition);
-  }
+  // use requestAnimationFrame to call the pizza moving function
+  requestAnimationFrame(moveThePizzas);
 }
 
 // runs updatePositions on scroll
@@ -514,7 +523,6 @@ window.addEventListener('scroll', updatePositions);
 //document.addEventListener('DOMContentLoaded', function() {
 
 // I moved this code inside a requestAnimationFrame so the browser can just do it at it's earliest convenience
-requestAnimationFrame(InitializePizza);
 
 function InitializePizza() {
   var cols = 8;
@@ -531,3 +539,5 @@ function InitializePizza() {
   }
   updatePositions();
 }
+
+requestAnimationFrame(InitializePizza);
