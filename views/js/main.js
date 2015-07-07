@@ -532,7 +532,7 @@ function InitializePizza() {
   // The height of each row
   var s = 256;
   // The width of each column
-  var w = 150
+  var w = 150;
   // Calculate height and width of the users browser window
   var screenHeight = window.outerHeight;
   var screenWidth = window.outerWidth;
