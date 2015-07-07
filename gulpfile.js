@@ -65,11 +65,11 @@ gulp.task('scripts', function() {
 });
 
 // Static server
-gulp.task('browser-sync', function() {
+gulp.task('serve', function() {
     browserSync.init({
       server: {
-        baseDir: "minified",
-        index: "index.html"
+        baseDir: "views",
+        index: "pizza.html"
       },
       port: 8080
     });
