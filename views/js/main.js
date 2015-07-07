@@ -438,10 +438,11 @@ var resizePizzas = function(size) {
     }
 
     // select all pizza containers outside of the loop
-    var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
+    var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
     
     // change size of all pizza containers according to newwidth variable
-    for (var i = 0; i < randomPizzas.length; i++) {
+    var numberOfPizzas = randomPizzas.length;
+    for (var i = 0; i < numberOfPizzas; i++) {
       randomPizzas[i].style.width = newwidth + "%";
     }
   }
@@ -493,12 +494,15 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
   // moved the layout calculation out of the for loop
   var scroll = document.body.scrollTop;
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('mover');
 
   // Create a function for moving the pizzas so it can be called by requestAnimationFrame
   function moveThePizzas() {
+    // create phase variable outside the loop so it isn't re-created each time
+    var phase;
+
     for (var i = 0; i < items.length; i++) {
-      var phase = Math.sin((scroll / 1250) + (i % 5));
+      phase = Math.sin((scroll / 1250) + (i % 5));
       items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
     }
 
@@ -525,17 +529,30 @@ window.addEventListener('scroll', updatePositions);
 // I moved this code inside a requestAnimationFrame so the browser can just do it at it's earliest convenience
 
 function InitializePizza() {
-  var cols = 8;
+  // The height of each row
   var s = 256;
-  for (var i = 0; i < 200; i++) {
-    var elem = document.createElement('img');
+  // The width of each column
+  var w = 150
+  // Calculate height and width of the users browser window
+  var screenHeight = window.outerHeight;
+  var screenWidth = window.outerWidth;
+  // screenheight divided by row height equals the number of rows to create
+  // Add 1 to avoid space at the bottom of the screen
+  var rows = Math.floor((screenHeight / s + 1));
+  // screenwidth divided by column width equals the number of columns to create
+  var cols = Math.floor(screenWidth / w);
+  console.log('Rows:' + rows + 'Cols:' + cols);
+  var numberOfPizzasToCreate = cols * rows;
+  var elem;
+  for (var i = 0; i < numberOfPizzasToCreate; i++) {
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
   updatePositions();
 }
